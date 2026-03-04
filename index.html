@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>SRT 20 Palu · Sekolah Rakyat Terintegrasi</title>
+  <meta name="description" content="Sekolah Rakyat Terintegrasi 20 Palu – Membentuk generasi unggul, berkarakter, dan berdaya saing.">
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+    .font-heading {
+      font-family: 'Inter', sans-serif;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+    .font-serif {
+      font-family: 'Playfair Display', serif;
+    }
+  </style>
+  <!-- Alpine.js -->
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <!-- GSAP & Lenis -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+  <!-- Typed.js -->
+  <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    :root {
+      --primary: #1e3a8a;
+      --secondary: #2dd4bf;
+      --accent: #f472b6;
+      --neutral-white: #fdfdfd;
+      --neutral-soft: #f1f5f9;
+      --dark: #0f172a;
+    }
+    .dark {
+      --neutral-white: #1e293b;
+      --neutral-soft: #334155;
+      --dark: #f1f5f9;
+    }
+    /* Navbar selalu transparan dengan blur */
+    #navbar {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255,255,255,0.2);
+    }
+    .dark #navbar {
+      background: rgba(15, 23, 42, 0.3);
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    #preloader {
+      position: fixed;
+      inset: 0;
+      background: var(--neutral-white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+      transition: opacity 0.8s ease, visibility 0.8s;
+    }
+    .dark #preloader {
+      background: var(--dark);
+    }
+    .preloader-logo {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #1e3a8a; /* warna primary untuk teks preloader */
+      font-size: 1.8rem;
+      font-weight: bold;
+      animation: pulse 1.5s infinite;
+      background: transparent;
+      box-shadow: none;
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.1); opacity: 0.8; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .card-hover {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .card-hover:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 30px -10px rgba(0,0,0,0.15);
+    }
+    .btn-glow {
+      transition: all 0.2s;
+    }
+    .btn-glow:hover {
+      box-shadow: 0 0 20px var(--secondary);
+      transform: scale(1.05);
+    }
+    html.lenis { height: auto; }
+    .lenis.lenis-smooth { scroll-behavior: auto; }
+    *:focus-visible {
+      outline: 3px solid var(--secondary);
+      outline-offset: 4px;
+    }
+    .page-transition {
+      transition: opacity 0.3s ease;
+    }
+    [x-cloak] { display: none !important; }
+
+    /* Background per halaman - overlay tipis */
+    .bg-home {
+      background-image: linear-gradient(135deg, rgba(30,58,138,0.5), rgba(45,212,191,0.4)), url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+    }
+    .bg-profil {
+      background-image: linear-gradient(135deg, rgba(30,58,138,0.5), rgba(244,114,182,0.4)), url('https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+    }
+    .bg-galeri {
+      background-image: linear-gradient(135deg, rgba(30,58,138,0.5), rgba(45,212,191,0.4)), url('https://images.unsplash.com/photo-1509062522246-3755977927d7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+    }
+    .bg-kegiatan {
+      background-image: linear-gradient(135deg, rgba(30,58,138,0.5), rgba(244,114,182,0.4)), url('https://images.unsplash.com/photo-1524178232363-1fb2b075b655?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+    }
+    .bg-artikel {
+      background-image: linear-gradient(135deg, rgba(30,58,138,0.5), rgba(45,212,191,0.4)), url('https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+    }
+    .bg-berita {
+      background-image: linear-gradient(135deg, rgba(30,58,138,0.5), rgba(244,114,182,0.4)), url('https://images.unsplash.com/photo-1495020689064-9584e4b7cfdd?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+    }
+    .bg-ppdb {
+      background-image: linear-gradient(135deg, rgba(30,58,138,0.5), rgba(45,212,191,0.4)), url('https://images.unsplash.com/photo-1523580846011-d3a5bc25702b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+    }
+    .bg-kontak {
+      background-image: linear-gradient(135deg, rgba(30,58,138,0.5), rgba(244,114,182,0.4)), url('https://images.unsplash.com/photo-1577896851231-70c188d104f3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+    }
+    /* Konten transparan */
+    .page-content {
+      background-color: rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(10px);
+      border-radius: 1.5rem;
+      padding: 2rem;
+      margin: 1rem;
+      border: 1px solid rgba(255,255,255,0.2);
+      box-shadow: 0 20px 40px -15px rgba(0,0,0,0.5);
+    }
+    .dark .page-content {
+      background-color: rgba(0, 0, 0, 0.4);
+      border-color: rgba(255,255,255,0.1);
+    }
+    /* Kata-kata sambutan dan penutup */
+    .greeting {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 1.3rem;
+      color: white;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+      border-left: 4px solid var(--accent);
+      padding-left: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    .closing {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 1.2rem;
+      color: white;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+      border-right: 4px solid var(--secondary);
+      padding-right: 1.5rem;
+      text-align: right;
+      margin-top: 2rem;
+    }
+    /* Typed cursor */
+    .typed-cursor {
+      font-size: 1.3rem;
+      color: white;
+    }
+    /* Teks hitam untuk logo di navbar */
+    .logo-text {
+      color: #1e293b; /* dark charcoal */
+    }
+    .dark .logo-text {
+      color: white;
+    }
+  </style>
+</head>
+<body class="bg-[#fdfdfd] text-[#0f172a] dark:bg-[#0f172a] dark:text-[#f1f5f9] transition-colors duration-300" 
+      x-data="{ 
+        darkMode: false,
+        currentPage: 'home'
+      }" 
+      x-init="darkMode = localStorage.getItem('darkMode') === 'true'; if (darkMode) document.documentElement.classList.add('dark'); 
+             window.addEventListener('popstate', (e) => { if (e.state?.page) currentPage = e.state.page; });
+             history.replaceState({ page: 'home' }, '', '#home');
+             $watch('currentPage', (val) => {
+               history.pushState({ page: val }, '', `#${val}`);
+               window.scrollTo({ top: 0, behavior: 'smooth' });
+               animatePageIn(val);
+             });"
+      @dark-mode-toggle.window="darkMode = !darkMode; localStorage.setItem('darkMode', darkMode); document.documentElement.classList.toggle('dark', darkMode)">
+  
+  <!-- Preloader -->
+  <div id="preloader">
+    <div class="preloader-logo font-heading text-4xl">SRT20</div>
+  </div>
+
+  <!-- Navbar -->
+  <nav id="navbar" class="fixed top-0 left-0 w-full z-50 py-4 px-6 md:px-12 flex items-center justify-between">
+    <div class="flex items-center gap-2">
+      <!-- Logo dengan warna hitam (di mode terang) dan putih (mode gelap) -->
+      <span class="font-heading font-bold text-2xl logo-text">SRT<span class="text-[#2dd4bf]">20</span></span>
+      <span class="text-sm text-gray-700 dark:text-gray-300 hidden sm:inline">Palu</span>
+    </div>
+    <div class="flex items-center gap-6">
+      <div class="hidden md:flex gap-6 font-medium text-gray-800 dark:text-gray-200">
+        <a href="#" @click.prevent="currentPage = 'home'" :class="{ 'text-[#2dd4bf] font-semibold' : currentPage === 'home' }" class="hover:text-[#2dd4bf] transition">Beranda</a>
+        <a href="#" @click.prevent="currentPage = 'profil'" :class="{ 'text-[#2dd4bf] font-semibold' : currentPage === 'profil' }" class="hover:text-[#2dd4bf] transition">Profil</a>
+        <a href="#" @click.prevent="currentPage = 'galeri'" :class="{ 'text-[#2dd4bf] font-semibold' : currentPage === 'galeri' }" class="hover:text-[#2dd4bf] transition">Galeri</a>
+        <a href="#" @click.prevent="currentPage = 'kegiatan'" :class="{ 'text-[#2dd4bf] font-semibold' : currentPage === 'kegiatan' }" class="hover:text-[#2dd4bf] transition">Kegiatan</a>
+        <a href="#" @click.prevent="currentPage = 'artikel'" :class="{ 'text-[#2dd4bf] font-semibold' : currentPage === 'artikel' }" class="hover:text-[#2dd4bf] transition">Artikel</a>
+        <a href="#" @click.prevent="currentPage = 'berita'" :class="{ 'text-[#2dd4bf] font-semibold' : currentPage === 'berita' }" class="hover:text-[#2dd4bf] transition">Berita</a>
+        <a href="#" @click.prevent="currentPage = 'ppdb'" :class="{ 'text-[#2dd4bf] font-semibold' : currentPage === 'ppdb' }" class="hover:text-[#2dd4bf] transition">PPDB</a>
+        <a href="#" @click.prevent="currentPage = 'kontak'" :class="{ 'text-[#2dd4bf] font-semibold' : currentPage === 'kontak' }" class="hover:text-[#2dd4bf] transition">Kontak</a>
+      </div>
+      <button @click="$dispatch('dark-mode-toggle')" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition text-gray-800 dark:text-gray-200" aria-label="Toggle dark mode">
+        <i class="fas fa-moon" x-show="!darkMode"></i>
+        <i class="fas fa-sun" x-show="darkMode" style="display: none;"></i>
+      </button>
+      <button id="menuBtn" class="md:hidden p-2 focus:outline-none text-gray-800 dark:text-gray-200" aria-label="Menu">
+        <i class="fas fa-bars text-2xl"></i>
+      </button>
+    </div>
+    <!-- Mobile menu -->
+    <div id="mobileMenu" class="absolute top-full left-0 w-full bg-white/90 dark:bg-[#1e293b]/90 backdrop-blur-md shadow-lg py-4 px-6 flex flex-col gap-3 md:hidden hidden">
+      <a href="#" @click.prevent="currentPage = 'home'; mobileMenu.classList.add('hidden')" class="py-2 hover:text-[#2dd4bf]">Beranda</a>
+      <a href="#" @click.prevent="currentPage = 'profil'; mobileMenu.classList.add('hidden')" class="py-2 hover:text-[#2dd4bf]">Profil</a>
+      <a href="#" @click.prevent="currentPage = 'galeri'; mobileMenu.classList.add('hidden')" class="py-2 hover:text-[#2dd4bf]">Galeri</a>
+      <a href="#" @click.prevent="currentPage = 'kegiatan'; mobileMenu.classList.add('hidden')" class="py-2 hover:text-[#2dd4bf]">Kegiatan</a>
+      <a href="#" @click.prevent="currentPage = 'artikel'; mobileMenu.classList.add('hidden')" class="py-2 hover:text-[#2dd4bf]">Artikel</a>
+      <a href="#" @click.prevent="currentPage = 'berita'; mobileMenu.classList.add('hidden')" class="py-2 hover:text-[#2dd4bf]">Berita</a>
+      <a href="#" @click.prevent="currentPage = 'ppdb'; mobileMenu.classList.add('hidden')" class="py-2 hover:text-[#2dd4bf]">PPDB</a>
+      <a href="#" @click.prevent="currentPage = 'kontak'; mobileMenu.classList.add('hidden')" class="py-2 hover:text-[#2dd4bf]">Kontak</a>
+    </div>
+  </nav>
+
+  <!-- Konten Halaman -->
+  <main class="pt-0">
+    <!-- Halaman Beranda -->
+    <section x-show="currentPage === 'home'" x-cloak class="page-transition bg-home min-h-screen flex items-center justify-center">
+      <div class="max-w-6xl mx-auto">
+        <div class="page-content">
+          <!-- Kata Sambutan dengan efek ketikan - diperbarui -->
+          <div class="greeting !border-none !pl-0 min-h-[3rem]">
+            <span id="typed-greeting"></span>
+          </div>
+          
+          <div class="text-white text-center">
+            <h1 class="font-heading text-5xl md:text-7xl font-bold leading-tight mb-6">Sekolah Rakyat Terintegrasi 20 Palu<br><span class="text-[#f472b6]">Membentuk Generasi Unggul & Berkarakter</span></h1>
+            <p class="text-xl md:text-2xl mb-10 max-w-2xl mx-auto opacity-90">Menyiapkan pemimpin masa depan dengan pendidikan holistik dan berkelanjutan.</p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+              <a href="#" @click.prevent="currentPage = 'ppdb'" class="btn-glow bg-[#f472b6] text-[#0f172a] font-bold py-4 px-10 rounded-full text-lg hover:bg-[#fb923c] transition shadow-2xl">PPDB 2026/2027</a>
+              <a href="#" @click.prevent="currentPage = 'profil'" class="btn-glow bg-white/20 backdrop-blur-sm text-white border-2 border-white py-4 px-10 rounded-full text-lg hover:bg-white/30 transition">Jelajahi Sekolah</a>
+            </div>
+          </div>
+          
+          <!-- Kata Penutup -->
+          <div class="closing">"Bersama kita wujudkan pendidikan untuk semua, tanpa kecuali."</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Halaman Profil -->
+    <section x-show="currentPage === 'profil'" x-cloak class="page-transition bg-profil min-h-screen py-12 px-6 md:px-12 flex items-center justify-center">
+      <div class="max-w-7xl mx-auto">
+        <div class="page-content">
+          <!-- Kata sambutan baru -->
+          <div class="greeting">"Di sini, setiap anak adalah bintang yang bersinar."</div>
+          
+          <h2 class="font-heading text-4xl md:text-5xl font-bold text-center text-white mb-12">Profil SRT 20 Palu</h2>
+          <div class="grid md:grid-cols-2 gap-12 items-start mb-16">
+            <div>
+              <h3 class="font-heading text-3xl font-bold text-white mb-6">Visi & Misi</h3>
+              <div class="bg-white/10 backdrop-blur-md p-8 rounded-3xl border border-white/20">
+                <p class="text-lg italic font-serif text-[#f472b6] mb-4">“Mewujudkan insan cerdas, mandiri, dan berakhlak mulia melalui pendidikan berasrama yang holistik”</p>
+                <ul class="space-y-3 text-white/90">
+                  <li class="flex gap-3"><span class="text-[#2dd4bf] text-xl">•</span> Menyediakan akses pendidikan gratis & berkualitas bagi anak kurang mampu</li>
+                  <li class="flex gap-3"><span class="text-[#2dd4bf] text-xl">•</span> Membangun karakter melalui program Bina Takwa & Bina Lingkungan</li>
+                  <li class="flex gap-3"><span class="text-[#2dd4bf] text-xl">•</span> Mengembangkan keterampilan hidup mandiri dan kepemimpinan</li>
+                  <li class="flex gap-3"><span class="text-[#2dd4bf] text-xl">•</span> Menjalin sinergi dengan berbagai pihak untuk perluasan wawasan siswa</li>
+                </ul>
+              </div>
+            </div>
+            <div>
+              <h3 class="font-heading text-3xl font-bold text-white mb-6">Program Unggulan</h3>
+              <div class="grid gap-6">
+                <div class="flex gap-4 items-start bg-white/10 backdrop-blur-md p-6 rounded-2xl border border-white/20 card-hover">
+                  <div class="text-4xl text-[#f472b6]"><i class="fas fa-hands-praying"></i></div>
+                  <div><h4 class="font-bold text-xl text-white">Bina Takwa</h4><p class="text-white/80">Jumat pagi: zikir bersama, sedekah, salat dhuha, kultum.</p></div>
+                </div>
+                <div class="flex gap-4 items-start bg-white/10 backdrop-blur-md p-6 rounded-2xl border border-white/20 card-hover">
+                  <div class="text-4xl text-[#2dd4bf]"><i class="fas fa-leaf"></i></div>
+                  <div><h4 class="font-bold text-xl text-white">Bina Lingkungan</h4><p class="text-white/80">Kegiatan Minggu pagi: menumbuhkan kepedulian sosial & tanggung jawab.</p></div>
+                </div>
+                <div class="flex gap-4 items-start bg-white/10 backdrop-blur-md p-6 rounded-2xl border border-white/20 card-hover">
+                  <div class="text-4xl text-[#1e3a8a]"><i class="fas fa-coins"></i></div>
+                  <div><h4 class="font-bold text-xl text-white">Kemenkeu Mengajar</h4><p class="text-white/80">Edukasi literasi keuangan & pengelolaan uang.</p></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="closing">"Setiap langkah kami adalah dedikasi untuk masa depan yang lebih adil."</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Halaman Galeri -->
+    <section x-show="currentPage === 'galeri'" x-cloak class="page-transition bg-galeri min-h-screen py-12 px-6 md:px-12 flex items-center justify-center">
+      <div class="max-w-7xl mx-auto">
+        <div class="page-content">
+          <div class="greeting">"Senja di puncak ilmu, bersama tawa dan mimpi."</div>
+          
+          <h2 class="font-heading text-4xl md:text-5xl font-bold text-center text-white mb-4">Galeri Kegiatan SRT 20 Palu</h2>
+          <p class="text-center text-white/90 mb-12 max-w-2xl mx-auto">Momen-momen berharga selama proses belajar dan pembinaan karakter.</p>
+          <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 auto-rows-[200px]">
+            <!-- foto-foto sama -->
+            <div class="relative overflow-hidden rounded-2xl col-span-2 row-span-2">
+              <img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="KBM" class="w-full h-full object-cover hover:scale-110 transition duration-500" loading="lazy">
+              <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-3 text-white text-sm">KBM di Gedung BPSDMD</div>
+            </div>
+            <div class="relative overflow-hidden rounded-2xl">
+              <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Kemenkeu" class="w-full h-full object-cover hover:scale-110 transition duration-500" loading="lazy">
+              <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-2 text-white text-xs">Kemenkeu Mengajar</div>
+            </div>
+            <div class="relative overflow-hidden rounded-2xl">
+              <img src="https://images.unsplash.com/photo-1577896851231-70c188d104f3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Perpustakaan" class="w-full h-full object-cover hover:scale-110 transition duration-500" loading="lazy">
+              <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-2 text-white text-xs">Fasilitas belajar</div>
+            </div>
+            <div class="relative overflow-hidden rounded-2xl">
+              <img src="https://images.unsplash.com/photo-1523580846011-d3a5bc25702b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="MPLS" class="w-full h-full object-cover hover:scale-110 transition duration-500" loading="lazy">
+              <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-2 text-white text-xs">MPLS & Pemeriksaan</div>
+            </div>
+            <div class="relative overflow-hidden rounded-2xl">
+              <img src="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Bina Takwa" class="w-full h-full object-cover hover:scale-110 transition duration-500" loading="lazy">
+              <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-2 text-white text-xs">Bina Takwa</div>
+            </div>
+            <div class="relative overflow-hidden rounded-2xl col-span-2">
+              <img src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Tari" class="w-full h-full object-cover hover:scale-110 transition duration-500" loading="lazy">
+              <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-2 text-white text-sm">Tari Mokambu</div>
+            </div>
+            <div class="relative overflow-hidden rounded-2xl">
+              <img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Outbound" class="w-full h-full object-cover hover:scale-110 transition duration-500" loading="lazy">
+              <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-2 text-white text-xs">Outbound MPLS</div>
+            </div>
+          </div>
+          
+          <div class="closing">"Setiap senyum mereka adalah semangat kami untuk terus berkarya."</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Halaman Kegiatan -->
+    <section x-show="currentPage === 'kegiatan'" x-cloak class="page-transition bg-kegiatan min-h-screen py-12 px-6 md:px-12 flex items-center justify-center">
+      <div class="max-w-7xl mx-auto">
+        <div class="page-content">
+          <div class="greeting">"Aktivitas harian yang membentuk karakter unggul dan jiwa sosial yang tinggi."</div>
+          
+          <h2 class="font-heading text-4xl md:text-5xl font-bold text-center text-white mb-4">Kegiatan & Berita Terkini</h2>
+          <p class="text-center text-white/90 mb-12">Informasi terbaru seputar aktivitas SRT 20 Palu.</p>
+          <div class="grid md:grid-cols-3 gap-8">
+            <div class="bg-white/10 backdrop-blur-md rounded-3xl overflow-hidden shadow-lg border border-white/20 card-hover">
+              <img src="https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Launching" class="w-full h-48 object-cover" loading="lazy">
+              <div class="p-6">
+                <p class="text-sm text-[#f472b6] mb-2"><i class="far fa-calendar-alt mr-1"></i> 4 Desember 2025</p>
+                <h3 class="font-bold text-xl text-white mb-2">Launching oleh Gubernur Sulteng</h3>
+                <p class="text-white/80 mb-4">Diresmikan oleh Gubernur Anwar Hafid bersama Wakil Mendagri RI.</p>
+                <a href="#" class="text-[#2dd4bf] font-semibold hover:underline">Baca selengkapnya →</a>
+              </div>
+            </div>
+            <div class="bg-white/10 backdrop-blur-md rounded-3xl overflow-hidden shadow-lg border border-white/20 card-hover">
+              <img src="https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Kemenkeu" class="w-full h-48 object-cover" loading="lazy">
+              <div class="p-6">
+                <p class="text-sm text-[#f472b6] mb-2"><i class="far fa-calendar-alt mr-1"></i> 10 November 2025</p>
+                <h3 class="font-bold text-xl text-white mb-2">Kemenkeu Mengajar</h3>
+                <p class="text-white/80 mb-4">Edukasi keuangan bertepatan Hari Pahlawan.</p>
+                <a href="#" class="text-[#2dd4bf] font-semibold hover:underline">Baca selengkapnya →</a>
+              </div>
+            </div>
+            <div class="bg-white/10 backdrop-blur-md rounded-3xl overflow-hidden shadow-lg border border-white/20 card-hover">
+              <img src="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Bina Takwa" class="w-full h-48 object-cover" loading="lazy">
+              <div class="p-6">
+                <p class="text-sm text-[#f472b6] mb-2"><i class="far fa-calendar-alt mr-1"></i> Rutin Jumat</p>
+                <h3 class="font-bold text-xl text-white mb-2">Program Bina Takwa</h3>
+                <p class="text-white/80 mb-4">Pembentukan karakter religius siswa.</p>
+                <a href="#" class="text-[#2dd4bf] font-semibold hover:underline">Baca selengkapnya →</a>
+              </div>
+            </div>
+          </div>
+          
+          <div class="closing">"Dari kegiatan sederhana, lahir kebiasaan mulia."</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Halaman Artikel -->
+    <section x-show="currentPage === 'artikel'" x-cloak class="page-transition bg-artikel min-h-screen py-12 px-6 md:px-12 flex items-center justify-center">
+      <div class="max-w-7xl mx-auto">
+        <div class="page-content">
+          <div class="greeting">"Wawasan dan pemikiran tentang pendidikan rakyat, untuk perubahan yang lebih baik."</div>
+          
+          <h2 class="font-heading text-4xl md:text-5xl font-bold text-center text-white mb-4">Artikel Sekolah Rakyat</h2>
+          <p class="text-center text-white/90 mb-12">Refleksi dan gagasan untuk kemajuan pendidikan anak bangsa.</p>
+          <div class="grid md:grid-cols-3 gap-8">
+            <div class="bg-white/10 backdrop-blur-md rounded-3xl overflow-hidden shadow-lg border border-white/20 card-hover">
+              <div class="p-6">
+                <h3 class="font-bold text-xl text-white mb-2">Pendidikan Gratis: Hak Semua Anak Bangsa</h3>
+                <p class="text-white/80 mb-4">Pendidikan adalah hak dasar setiap warga negara. Sekolah Rakyat hadir untuk memastikan tidak ada anak yang tertinggal hanya karena keterbatasan ekonomi.</p>
+                <a href="#" class="text-[#2dd4bf] font-semibold hover:underline">Baca selengkapnya →</a>
+              </div>
+            </div>
+            <div class="bg-white/10 backdrop-blur-md rounded-3xl overflow-hidden shadow-lg border border-white/20 card-hover">
+              <div class="p-6">
+                <h3 class="font-bold text-xl text-white mb-2">Peran Sekolah Rakyat dalam Memutus Rantai Kemiskinan</h3>
+                <p class="text-white/80 mb-4">Dengan pendidikan berkualitas dan pembinaan karakter, Sekolah Rakyat menjadi jembatan bagi anak-anak untuk keluar dari lingkaran kemiskinan.</p>
+                <a href="#" class="text-[#2dd4bf] font-semibold hover:underline">Baca selengkapnya →</a>
+              </div>
+            </div>
+            <div class="bg-white/10 backdrop-blur-md rounded-3xl overflow-hidden shadow-lg border border-white/20 card-hover">
+              <div class="p-6">
+                <h3 class="font-bold text-xl text-white mb-2">Membangun Karakter Anak Melalui Pendidikan Berasrama</h3>
+                <p class="text-white/80 mb-4">Sistem asrama mengajarkan kemandirian, tanggung jawab, dan kebersamaan – bekal penting untuk masa depan.</p>
+                <a href="#" class="text-[#2dd4bf] font-semibold hover:underline">Baca selengkapnya →</a>
+              </div>
+            </div>
+          </div>
+          
+          <div class="closing">"Mari kita renungkan dan bergerak bersama."</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Halaman Berita -->
+    <section x-show="currentPage === 'berita'" x-cloak class="page-transition bg-berita min-h-screen py-12 px-6 md:px-12 flex items-center justify-center">
+      <div class="max-w-7xl mx-auto">
+        <div class="page-content">
+          <div class="greeting">"Informasi terkini seputar perkembangan Sekolah Rakyat dan kabar membanggakan."</div>
+          
+          <h2 class="font-heading text-4xl md:text-5xl font-bold text-center text-white mb-4">Berita Sekolah Rakyat</h2>
+          <p class="text-center text-white/90 mb-12">Kabar baik adalah inspirasi bagi kita semua.</p>
+          <div class="grid md:grid-cols-3 gap-8">
+            <div class="bg-white/10 backdrop-blur-md rounded-3xl overflow-hidden shadow-lg border border-white/20 card-hover">
+              <img src="https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Launching" class="w-full h-48 object-cover" loading="lazy">
+              <div class="p-6">
+                <p class="text-sm text-[#f472b6] mb-2"><i class="far fa-calendar-alt mr-1"></i> 4 Desember 2025</p>
+                <h3 class="font-bold text-xl text-white mb-2">Launching SRT 20 Palu oleh Gubernur</h3>
+                <p class="text-white/80 mb-4">Acara peresmian berlangsung meriah di halaman Dinas Sosial Sulteng, dihadiri ratusan tamu.</p>
+                <a href="#" class="text-[#2dd4bf] font-semibold hover:underline">Baca selengkapnya →</a>
+              </div>
+            </div>
+            <div class="bg-white/10 backdrop-blur-md rounded-3xl overflow-hidden shadow-lg border border-white/20 card-hover">
+              <img src="https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Kemenkeu" class="w-full h-48 object-cover" loading="lazy">
+              <div class="p-6">
+                <p class="text-sm text-[#f472b6] mb-2"><i class="far fa-calendar-alt mr-1"></i> 10 November 2025</p>
+                <h3 class="font-bold text-xl text-white mb-2">Kemenkeu Mengajar di SRT 20 Palu</h3>
+                <p class="text-white/80 mb-4">Para pegawai Kemenkeu memberikan edukasi keuangan kepada siswa, disambut antusias.</p>
+                <a href="#" class="text-[#2dd4bf] font-semibold hover:underline">Baca selengkapnya →</a>
+              </div>
+            </div>
+            <div class="bg-white/10 backdrop-blur-md rounded-3xl overflow-hidden shadow-lg border border-white/20 card-hover">
+              <img src="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="KLH" class="w-full h-48 object-cover" loading="lazy">
+              <div class="p-6">
+                <p class="text-sm text-[#f472b6] mb-2"><i class="far fa-calendar-alt mr-1"></i> 16 Desember 2025</p>
+                <h3 class="font-bold text-xl text-white mb-2">Kunjungan Staf Ahli KLH</h3>
+                <p class="text-white/80 mb-4">Apresiasi terhadap program lingkungan sekolah dan diskusi bersama siswa.</p>
+                <a href="#" class="text-[#2dd4bf] font-semibold hover:underline">Baca selengkapnya →</a>
+              </div>
+            </div>
+          </div>
+          
+          <div class="closing">"Kabar baik adalah inspirasi bagi kita semua."</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Halaman PPDB -->
+    <section x-show="currentPage === 'ppdb'" x-cloak class="page-transition bg-ppdb min-h-screen py-12 px-6 md:px-12 flex items-center justify-center">
+      <div class="max-w-7xl mx-auto">
+        <div class="page-content">
+          <div class="greeting">"Ayah Bunda, mari daftarkan putra-putri Anda ke sekolah gratis berkualitas."</div>
+          
+          <h2 class="font-heading text-4xl md:text-5xl font-bold text-center text-white mb-4">PPDB 2026/2027</h2>
+          <p class="text-center text-white/90 mb-12 max-w-2xl mx-auto">Pendaftaran untuk jenjang SMP dan SMA. Diutamakan keluarga kurang mampu (Desil 1-2 DTSEN).</p>
+          <div class="grid md:grid-cols-3 gap-6 mb-12">
+            <div class="bg-white/10 backdrop-blur-md p-8 rounded-2xl text-center border border-white/20 card-hover">
+              <div class="text-5xl text-[#2dd4bf] mb-4"><i class="fas fa-calendar-check"></i></div>
+              <h3 class="font-bold text-xl text-white mb-2">Jadwal</h3>
+              <p class="text-white/80">Pendaftaran: Mei–Juni 2026<br>Seleksi: Juli 2026<br>MPLS: Agustus 2026</p>
+            </div>
+            <div class="bg-white/10 backdrop-blur-md p-8 rounded-2xl text-center border border-white/20 card-hover">
+              <div class="text-5xl text-[#f472b6] mb-4"><i class="fas fa-file-alt"></i></div>
+              <h3 class="font-bold text-xl text-white mb-2">Syarat</h3>
+              <p class="text-white/80">KK, surat tidak mampu, rapor, usia sesuai jenjang.</p>
+            </div>
+            <div class="bg-white/10 backdrop-blur-md p-8 rounded-2xl text-center border border-white/20 card-hover">
+              <div class="text-5xl text-[#1e3a8a] mb-4"><i class="fas fa-home"></i></div>
+              <h3 class="font-bold text-xl text-white mb-2">Fasilitas</h3>
+              <p class="text-white/80">Gratis biaya, asrama, makan 3x, seragam.</p>
+            </div>
+          </div>
+          <div class="text-center">
+            <a href="#" class="btn-glow inline-block bg-[#f472b6] text-[#0f172a] font-bold py-4 px-12 rounded-full text-xl hover:bg-[#fb923c] transition shadow-2xl">Daftar Sekarang</a>
+          </div>
+          
+          <div class="closing">"Kesempatan emas untuk masa depan cerah anak-anak kita."</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Halaman Kontak -->
+    <section x-show="currentPage === 'kontak'" x-cloak class="page-transition bg-kontak min-h-screen py-12 px-6 md:px-12 flex items-center justify-center">
+      <div class="max-w-7xl mx-auto">
+        <div class="page-content">
+          <div class="greeting">"Kami terbuka untuk saran, kritik, dan kerjasama demi kemajuan pendidikan rakyat."</div>
+          
+          <h2 class="font-heading text-4xl md:text-5xl font-bold text-center text-white mb-4">Kontak & Lokasi</h2>
+          <div class="grid md:grid-cols-2 gap-12 mt-12">
+            <div>
+              <div class="bg-white/10 backdrop-blur-md p-8 rounded-3xl border border-white/20">
+                <h3 class="font-bold text-2xl text-white mb-4">Sekolah Rakyat Terintegrasi 20 Palu</h3>
+                <p class="flex gap-3 items-center text-white/90 mb-3"><i class="fas fa-map-marker-alt text-[#f472b6] w-6"></i> Gedung BPSDMD, Jl. S. Parman No. 67, Palu</p>
+                <p class="flex gap-3 items-center text-white/90 mb-3"><i class="fas fa-phone-alt text-[#2dd4bf] w-6"></i> (0451) 421234</p>
+                <p class="flex gap-3 items-center text-white/90 mb-3"><i class="fas fa-envelope text-[#1e3a8a] w-6"></i> srt20.palu@sultengprov.go.id</p>
+                <div class="flex gap-4 mt-6">
+                  <a href="#" class="text-3xl text-white hover:text-[#f472b6] transition"><i class="fab fa-instagram"></i></a>
+                  <a href="#" class="text-3xl text-white hover:text-[#f472b6] transition"><i class="fab fa-tiktok"></i></a>
+                  <a href="#" class="text-3xl text-white hover:text-[#f472b6] transition"><i class="fab fa-youtube"></i></a>
+                </div>
+              </div>
+            </div>
+            <div class="h-80 md:h-auto rounded-3xl overflow-hidden shadow-xl">
+              <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3989.6865!2d119.8435!3d-0.8955!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2d8be8f2e8b8b8b%3A0x8b8b8b8b8b8b8b8b!2sBPSDMD%20Sulawesi%20Tengah!5e0!3m2!1sid!2sid!4v1645678901234!5m2!1sid!2sid" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+            </div>
+          </div>
+          <p class="text-center text-white/80 mt-6 text-sm">Rencana pembangunan permanen di Jl. Soekarno Hatta No. 2, Talise.</p>
+          
+          <div class="closing">"Terima kasih telah peduli pada pendidikan rakyat."</div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-[#1e3a8a]/80 dark:bg-[#0f172a]/80 backdrop-blur-md text-white py-12 px-6">
+    <div class="max-w-7xl mx-auto grid md:grid-cols-4 gap-8">
+      <div>
+        <div class="flex items-center gap-2 mb-4">
+          <span class="font-heading font-bold text-2xl">SRT<span class="text-[#2dd4bf]">20</span></span>
+          <span class="text-sm">Palu</span>
+        </div>
+        <p class="text-sm opacity-80">Membentuk generasi unggul, berkarakter, dan berdaya saing melalui pendidikan holistik.</p>
+      </div>
+      <div>
+        <h4 class="font-bold text-lg mb-4">Tautan Cepat</h4>
+        <ul class="space-y-2">
+          <li><a href="#" @click.prevent="currentPage = 'home'" class="hover:underline">Beranda</a></li>
+          <li><a href="#" @click.prevent="currentPage = 'profil'" class="hover:underline">Profil</a></li>
+          <li><a href="#" @click.prevent="currentPage = 'galeri'" class="hover:underline">Galeri</a></li>
+          <li><a href="#" @click.prevent="currentPage = 'kegiatan'" class="hover:underline">Kegiatan</a></li>
+          <li><a href="#" @click.prevent="currentPage = 'artikel'" class="hover:underline">Artikel</a></li>
+          <li><a href="#" @click.prevent="currentPage = 'berita'" class="hover:underline">Berita</a></li>
+          <li><a href="#" @click.prevent="currentPage = 'ppdb'" class="hover:underline">PPDB</a></li>
+          <li><a href="#" @click.prevent="currentPage = 'kontak'" class="hover:underline">Kontak</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-bold text-lg mb-4">Program</h4>
+        <ul class="space-y-2">
+          <li><a href="#" class="hover:underline">SMP</a></li>
+          <li><a href="#" class="hover:underline">SMA</a></li>
+          <li><a href="#" class="hover:underline">Bina Takwa</a></li>
+          <li><a href="#" class="hover:underline">Bina Lingkungan</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-bold text-lg mb-4">Ikuti Kami</h4>
+        <div class="flex gap-4 text-2xl">
+          <a href="#" class="hover:text-[#f472b6]"><i class="fab fa-instagram"></i></a>
+          <a href="#" class="hover:text-[#f472b6]"><i class="fab fa-tiktok"></i></a>
+          <a href="#" class="hover:text-[#f472b6]"><i class="fab fa-youtube"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="border-t border-white/20 mt-8 pt-6 text-center text-sm opacity-70">
+      &copy; 2026 Sekolah Rakyat Terintegrasi 20 Palu. All rights reserved.
+    </div>
+  </footer>
+
+  <script>
+    (function() {
+      window.addEventListener('load', function() {
+        gsap.to('#preloader', { opacity: 0, duration: 0.8, onComplete: () => document.getElementById('preloader').style.display = 'none' });
+      });
+
+      const lenis = new Lenis({ lerp: 0.1, wheelMultiplier: 0.7 });
+      function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
+      requestAnimationFrame(raf);
+
+      const menuBtn = document.getElementById('menuBtn');
+      const mobileMenu = document.getElementById('mobileMenu');
+      menuBtn.addEventListener('click', () => {
+        mobileMenu.classList.toggle('hidden');
+      });
+      mobileMenu.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => mobileMenu.classList.add('hidden'));
+      });
+
+      // Efek ketikan dengan kata-kata baru yang lebih puitis
+      if (document.getElementById('typed-greeting')) {
+        new Typed('#typed-greeting', {
+          strings: [
+            '"Selamat datang di Sekolah Rakyat, tempat mimpi anak bangsa bersemi."',
+            '"Pendidikan gratis berkualitas untuk rakyat, oleh rakyat."',
+            '"Mari bersama membangun masa depan cerah untuk anak kita."',
+            '"Di sini, setiap langkah kecil adalah lompatan besar."',
+            '"Pendidikan adalah jembatan menuju keadilan sosial."'
+          ],
+          typeSpeed: 50,
+          backSpeed: 25,
+          backDelay: 2000,
+          loop: true,
+          showCursor: true,
+          cursorChar: '|',
+        });
+      }
+
+      window.animatePageIn = function(page) {
+        const title = document.querySelector(`[x-show="currentPage === '${page}'"] .font-heading`);
+        if (title) {
+          gsap.fromTo(title, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out' });
+        }
+        const cards = document.querySelectorAll(`[x-show="currentPage === '${page}'"] .card-hover`);
+        gsap.fromTo(cards, 
+          { opacity: 0, y: 20 }, 
+          { opacity: 1, y: 0, duration: 0.6, stagger: 0.1, delay: 0.3, ease: 'power2.out' }
+        );
+      };
+
+      window.addEventListener('load', () => {
+        animatePageIn('home');
+      });
+
+      ScrollTrigger.refresh();
+    })();
+  </script>
+</body>
+</html>
